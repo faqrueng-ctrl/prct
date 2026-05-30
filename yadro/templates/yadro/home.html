@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Organizer</title>
+    <link rel="stylesheet" href="{% static 'yadro/style.css' %}">
+</head>
+<body>
+<div class="page">
+    <main class="container">
+        <h1>Упорядочивание данных</h1>
+
+        <section class="panel">
+            <h2>Поиск и фильтрация</h2>
+            <form class="form-row" method="get" action="{% url 'yadro:record_list' %}">
+                <input type="text" name="search" placeholder="Поиск по всем полям" value="{{ query.search }}">
+                <input type="text" name="category" placeholder="Категория" value="{{ query.category }}">
+                <input type="text" name="status" placeholder="Статус" value="{{ query.status }}">
+                <input type="text" name="priority" placeholder="Приоритет" value="{{ query.priority }}">
+                <input type="hidden" name="sort" value="{{ selected_sort }}">
+                <button class="btn primary" type="submit">Применить</button>
+                <a class="btn gray" href="{% url 'yadro:record_list' %}">Сброс</a>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Добавление данных</h2>
+            <form class="form-row" method="post" action="{% url 'yadro:add_record' %}">
+                {% csrf_token %}
+                <input type="text" name="title" placeholder="Название" required>
+                <input type="text" name="category" placeholder="Категория" required>
+                <input type="text" name="status" placeholder="Статус" required>
+                <input type="text" name="priority" placeholder="Приоритет" required>
+                <button class="btn primary" type="submit">Добавить</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Сортировка</h2>
+            <form class="form-row compact" method="get" action="{% url 'yadro:record_list' %}">
+                <input type="hidden" name="search" value="{{ query.search }}">
+                <input type="hidden" name="category" value="{{ query.category }}">
+                <input type="hidden" name="status" value="{{ query.status }}">
+                <input type="hidden" name="priority" value="{{ query.priority }}">
+                <select name="sort">
+                    {% for key, option in sort_options.items %}
+                        <option value="{{ key }}" {% if selected_sort == key %}selected{% endif %}>{{ option.0 }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn primary" type="submit">Применить</button>
+                <a class="btn gray" href="{% url 'yadro:record_list' %}">Сброс</a>
+            </form>
+        </section>
+
+        <section class="cards-grid" aria-label="Список записей">
+            {% for item in records %}
+                <article class="card">
+                    <div class="badge">#{{ item.id }}</div>
+                    <h3>{{ item.title }}</h3>
+                    <p><strong>Категория:</strong> {{ item.category }}</p>
+                    <p><strong>Статус:</strong> {{ item.status }}</p>
+                    <p><strong>Приоритет:</strong> {{ item.priority }}</p>
+                    {% if item.description %}
+                        <p><strong>Описание:</strong> {{ item.description }}</p>
+                    {% endif %}
+                    <p><strong>Активно:</strong> {{ item.is_active|yesno:"да,нет" }}</p>
+                    <p><strong>Дата:</strong> {{ item.created_at|date:"j E Y, H:i" }}</p>
+
+                    <div class="actions">
+                        <button class="btn warning" type="button" onclick="toggleEditForm({{ item.id }})">Редактировать</button>
+                        <form method="post" action="{% url 'yadro:delete_record' item.id %}" onsubmit="return confirm('Удалить запись?');">
+                            {% csrf_token %}
+                            <button class="btn danger" type="submit">Удалить</button>
+                        </form>
+                    </div>
+
+                    <form id="edit-form-{{ item.id }}" class="edit-form hidden" method="post" action="{% url 'yadro:update_record' item.id %}?{{ request.GET.urlencode }}">
+                        {% csrf_token %}
+                        <input type="text" name="title" value="{{ item.title }}" required>
+                        <input type="text" name="category" value="{{ item.category }}" required>
+                        <input type="text" name="status" value="{{ item.status }}" required>
+                        <input type="text" name="priority" value="{{ item.priority }}" required>
+                        <textarea name="description" rows="3">{{ item.description }}</textarea>
+                        <label class="checkbox">
+                            <input type="checkbox" name="is_active" {% if item.is_active %}checked{% endif %}>
+                            Активно
+                        </label>
+                        <button class="btn primary" type="submit">Сохранить</button>
+                    </form>
+                </article>
+            {% empty %}
+                <div class="empty">Записей пока нет. Добавьте данные через форму или админ-панель.</div>
+            {% endfor %}
+        </section>
+
+        <section class="panel help">
+            <h2>Тестовые данные для админки</h2>
+            <p>Для демонстрации создайте суперпользователя командой <code>python manage.py createsuperuser</code>, откройте <code>/admin/</code> и добавьте записи модели «Записи».</p>
+            <ul>
+                <li>Сервер — Инфраструктура — в работе — Высокий</li>
+                <li>Отчёт по практике — Документы — готово — Средний</li>
+                <li>Заявка клиента — CRM — ожидает — Критический</li>
+            </ul>
+        </section>
+    </main>
+</div>
+<script>
+    function toggleEditForm(id) {
+        const form = document.getElementById('edit-form-' + id);
+        if (form) {
+            form.classList.toggle('hidden');
+        }
+    }
+</script>
+</body>
+</html>
