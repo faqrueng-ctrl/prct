@@ -18,12 +18,7 @@
                 <input type="text" name="search" placeholder="Поиск по всем полям" value="{{ query.search }}">
                 <input type="text" name="category" placeholder="Категория" value="{{ query.category }}">
                 <input type="text" name="status" placeholder="Статус" value="{{ query.status }}">
-                <select name="priority" aria-label="Приоритет">
-                    <option value="">Любой приоритет</option>
-                    {% for value, label in priority_choices %}
-                        <option value="{{ value }}" {% if query.priority == value %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" name="priority" placeholder="Приоритет" value="{{ query.priority }}">
                 <input type="hidden" name="sort" value="{{ selected_sort }}">
                 <button class="btn primary" type="submit">Применить</button>
                 <a class="btn gray" href="{% url 'yadro:record_list' %}">Сброс</a>
@@ -37,12 +32,7 @@
                 <input type="text" name="title" placeholder="Название" required>
                 <input type="text" name="category" placeholder="Категория" required>
                 <input type="text" name="status" placeholder="Статус" required>
-                <select name="priority" required>
-                    {% for value, label in priority_choices %}
-                        <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                </select>
-                <input type="text" name="description" placeholder="Краткое описание">
+                <input type="text" name="priority" placeholder="Приоритет" required>
                 <button class="btn primary" type="submit">Добавить</button>
             </form>
         </section>
@@ -71,7 +61,7 @@
                     <h3>{{ item.title }}</h3>
                     <p><strong>Категория:</strong> {{ item.category }}</p>
                     <p><strong>Статус:</strong> {{ item.status }}</p>
-                    <p><strong>Приоритет:</strong> {{ item.get_priority_display }}</p>
+                    <p><strong>Приоритет:</strong> {{ item.priority }}</p>
                     {% if item.description %}
                         <p><strong>Описание:</strong> {{ item.description }}</p>
                     {% endif %}
@@ -91,11 +81,7 @@
                         <input type="text" name="title" value="{{ item.title }}" required>
                         <input type="text" name="category" value="{{ item.category }}" required>
                         <input type="text" name="status" value="{{ item.status }}" required>
-                        <select name="priority">
-                            {% for value, label in priority_choices %}
-                                <option value="{{ value }}" {% if item.priority == value %}selected{% endif %}>{{ label }}</option>
-                            {% endfor %}
-                        </select>
+                        <input type="text" name="priority" value="{{ item.priority }}" required>
                         <textarea name="description" rows="3">{{ item.description }}</textarea>
                         <label class="checkbox">
                             <input type="checkbox" name="is_active" {% if item.is_active %}checked{% endif %}>

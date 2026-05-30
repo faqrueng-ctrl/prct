@@ -44,7 +44,6 @@ def record_list(request):
     records, selected_sort = _filtered_records(request)
     context = {
         'records': records,
-        'priority_choices': DataRecord.Priority.choices,
         'sort_options': SORT_OPTIONS,
         'selected_sort': selected_sort,
         'query': request.GET,
@@ -54,11 +53,12 @@ def record_list(request):
 
 def add_record(request):
     if request.method == 'POST':
+        priority = request.POST.get('priority', '').strip() or 'средний'
         DataRecord.objects.create(
             title=request.POST.get('title', '').strip(),
             category=request.POST.get('category', '').strip(),
             status=request.POST.get('status', '').strip(),
-            priority=request.POST.get('priority') or DataRecord.Priority.MEDIUM,
+            priority=priority,
             description=request.POST.get('description', '').strip(),
         )
     return redirect('yadro:record_list')
@@ -70,7 +70,7 @@ def update_record(request, pk):
         record.title = request.POST.get('title', record.title).strip()
         record.category = request.POST.get('category', record.category).strip()
         record.status = request.POST.get('status', record.status).strip()
-        record.priority = request.POST.get('priority') or record.priority
+        record.priority = request.POST.get('priority', '').strip() or record.priority
         record.description = request.POST.get('description', record.description).strip()
         record.is_active = request.POST.get('is_active') == 'on'
         record.save()

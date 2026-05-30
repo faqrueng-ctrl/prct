@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Organizer</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111827;
+            background: #f3f4f6;
+        }
+        .page { padding: 32px 40px; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 32px 16px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+        }
+        h1 { margin: 0 0 22px; font-size: 30px; }
+        h2 { margin: 0 0 12px; font-size: 21px; }
+        .panel { margin-bottom: 20px; }
+        .form-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        input, select {
+            min-width: 170px;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 14px;
+            background: #ffffff;
+        }
+        .sort-select { min-width: 190px; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 35px;
+            padding: 9px 14px;
+            border: 0;
+            border-radius: 7px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .primary { background: #2563eb; }
+        .gray { background: #6b7280; }
+        .warning { background: #f59e0b; }
+        .danger { background: #dc2626; }
+        .cards-grid { display: grid; gap: 12px; margin-top: 8px; }
+        .card {
+            position: relative;
+            min-height: 205px;
+            padding: 18px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #f9fafb;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+        }
+        .card h3 { margin: 0 0 10px; font-size: 18px; }
+        .card p { margin: 4px 0; }
+        .badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            color: #4f46e5;
+            background: #e0e7ff;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 14px; }
+    </style>
+</head>
+<body>
+<div class="page">
+    <main class="container">
+        <h1>Упорядочивание данных</h1>
+
+        <section class="panel">
+            <h2>Поиск и фильтрация</h2>
+            <form class="form-row">
+                <input type="text" name="search" placeholder="Поиск по всем полям">
+                <input type="text" name="category" placeholder="Категория">
+                <input type="text" name="status" placeholder="Статус">
+                <input type="text" name="priority" placeholder="Приоритет">
+                <button class="btn primary" type="submit">Применить</button>
+                <button class="btn gray" type="reset">Сброс</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Добавление данных</h2>
+            <form class="form-row">
+                <input type="text" name="title" placeholder="Название">
+                <input type="text" name="category" placeholder="Категория">
+                <input type="text" name="status" placeholder="Статус">
+                <input type="text" name="priority" placeholder="Приоритет">
+                <button class="btn primary" type="submit">Добавить</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Сортировка</h2>
+            <form class="form-row">
+                <select class="sort-select" name="sort">
+                    <option selected>Сначала новые</option>
+                    <option>Сначала старые</option>
+                    <option>По названию</option>
+                    <option>По категории</option>
+                    <option>По статусу</option>
+                    <option>По приоритету</option>
+                </select>
+                <button class="btn primary" type="submit">Применить</button>
+                <button class="btn gray" type="reset">Сброс</button>
+            </form>
+        </section>
+
+        <section class="cards-grid">
+            <article class="card">
+                <div class="badge">#2</div>
+                <h3>adadadad</h3>
+                <p><strong>Категория:</strong> asdads</p>
+                <p><strong>Статус:</strong> делается</p>
+                <p><strong>Приоритет:</strong> первый</p>
+                <p><strong>Дата:</strong> May 19, 2026, 4:37 p.m.</p>
+                <div class="actions">
+                    <button class="btn warning" type="button">Редактировать</button>
+                    <button class="btn danger" type="button">Удалить</button>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>
